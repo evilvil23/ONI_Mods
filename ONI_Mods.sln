@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36804.6
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RonivansAndOntologyPatche", "RonivansAndOntologyPatche\RonivansAndOntologyPatche.csproj", "{87DD9370-9A27-42F5-82E4-ECE1D0303C6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robot_Animals(Remastered)", "RobotAnimals\Robot_Animals(Remastered).csproj", "{2DFE2147-B09F-4280-A0E3-80F89A77F8B3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87DD9370-9A27-42F5-82E4-ECE1D0303C6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87DD9370-9A27-42F5-82E4-ECE1D0303C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87DD9370-9A27-42F5-82E4-ECE1D0303C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87DD9370-9A27-42F5-82E4-ECE1D0303C6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DFE2147-B09F-4280-A0E3-80F89A77F8B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DFE2147-B09F-4280-A0E3-80F89A77F8B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DFE2147-B09F-4280-A0E3-80F89A77F8B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DFE2147-B09F-4280-A0E3-80F89A77F8B3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5F50B018-9ACC-4989-A3E1-DEB28A45E55A}
+	EndGlobalSection
+EndGlobal

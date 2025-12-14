@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2DFE2147-B09F-4280-A0E3-80F89A77F8B3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Robot_Animal_Remastered</RootNamespace>
+    <AssemblyName>RobotAnimals%28Remastered%29</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Config.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RobotAnimals.cs" />
+    <Compile Include="RobotAnimalSTRINGS.cs" />
+    <Compile Include="utils.cs" />
+    <Compile Include="utils\KLocUtil.cs" />
+    <Compile Include="utils\KLogUtil.cs" />
+    <Compile Include="utils\KModPatch.cs" />
+    <Compile Include="utils\KUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\OxygenNotIncluded\OxygenNotIncluded_Data\Managed\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\ONI_libs\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\ONI_libs\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.1.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\OxygenNotIncluded\OxygenNotIncluded_Data\Managed\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PLib">
+      <HintPath>..\..\ONI_libs\PLib.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\ONI_libs\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\ONI_libs\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="anim\assets\RobotHatch\hatch.png" />
+    <Content Include="anim\assets\RobotPacu\pacu.png" />
+    <Content Include="anim\assets\RobotPokeshell\pincher.png" />
+    <Content Include="anim\assets\RobotPuft\puft.png" />
+    <Content Include="anim\assets\RobotShoveVole\driller.png" />
+    <Content Include="anim\assets\RobotSlickster\oilFloater.png" />
+    <Content Include="anim\assets\RobotStaterpillar\baby_caterpillar.png" />
+    <Content Include="anim\assets\RobotStego\baby_stego.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="anim\assets\RobotHatch\hatch_anim.bytes" />
+    <None Include="anim\assets\RobotHatch\hatch_build.bytes" />
+    <None Include="anim\assets\RobotPacu\pacu_anim.bytes" />
+    <None Include="anim\assets\RobotPacu\pacu_build.bytes" />
+    <None Include="anim\assets\RobotPokeshell\pincher_anim.bytes" />
+    <None Include="anim\assets\RobotPokeshell\pincher_build.bytes" />
+    <None Include="anim\assets\RobotPuft\puft.atlas" />
+    <None Include="anim\assets\RobotPuft\puft_anim.bytes" />
+    <None Include="anim\assets\RobotPuft\puft_build.bytes" />
+    <None Include="anim\assets\RobotShoveVole\driller_anim.bytes" />
+    <None Include="anim\assets\RobotShoveVole\driller_build.bytes" />
+    <None Include="anim\assets\RobotSlickster\oilFloater_anim.bytes" />
+    <None Include="anim\assets\RobotSlickster\oilFloater_build.bytes" />
+    <None Include="anim\assets\RobotStaterpillar\baby_caterpillar_anim.bytes" />
+    <None Include="anim\assets\RobotStaterpillar\baby_caterpillar_build.bytes" />
+    <None Include="anim\assets\RobotStego\baby_stego_anim.bytes" />
+    <None Include="anim\assets\RobotStego\baby_stego_build.bytes" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
