@@ -27,6 +27,12 @@
                 public static LocString EFFECT = "好吃哈奇是一种杂食性的陆生小动物，自然生成于砂岩生态，可以人工养殖。好吃哈奇主要用于生产煤炭。";
                 public static LocString DESC = "哈奇进食后产出煤炭，是殖民地煤炭的主要来源之一。";
             }
+            public class RobotPacu
+            {
+                public static LocString NAME = "机械帕库鱼";
+                public static LocString EFFECT = "帕库鱼是一种优质的蛋白质来源，自然生成于湿地生态的污染水水域中，既可吃死亡后掉落的帕库鱼片，也可吃蛋。";
+                public static LocString DESC = "哈奇进食后产出污染土，凭借快速的繁殖速度，是殖民地蛋白质的主要来源之一。";
+            }
         }
 
         public class CONFIGURATIONITEM
@@ -45,6 +51,10 @@
             {
                 public static LocString ROCK_CONVERSION_COEFFICIENT = "机械哈奇 岩石配方转化系数";
                 public static LocString FOOD_CONVERSION_COEFFICIENT = "机械哈奇 食物配方转化系数";
+            }
+            public class RobotPacu_UI
+            {
+                public static LocString CONVERSION_COEFFICIENT = "机械帕库鱼转化系数";
             }
 
 

@@ -35,7 +35,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RobotAnimals.cs" />
     <Compile Include="RobotAnimalSTRINGS.cs" />
-    <Compile Include="utils.cs" />
+    <Compile Include="BuildingRegis.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="utils\KLocUtil.cs" />
     <Compile Include="utils\KLogUtil.cs" />
     <Compile Include="utils\KModPatch.cs" />
@@ -58,6 +59,7 @@
     <Reference Include="PLib">
       <HintPath>..\..\ONI_libs\PLib.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
     <Reference Include="UnityEngine">
       <HintPath>..\..\ONI_libs\UnityEngine.dll</HintPath>
     </Reference>

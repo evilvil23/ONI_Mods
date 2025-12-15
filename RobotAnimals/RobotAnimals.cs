@@ -1,6 +1,7 @@
 ﻿using PeterHan.PLib.Options;
 using STRINGS;
 using System.Collections.Generic;
+using System.Linq;
 using TUNING;
 using UnityEngine;
 using BUILDINGS = TUNING.BUILDINGS;
@@ -254,11 +255,6 @@ namespace sinevil.Robot_Animal_Remastered
             this.addConfigureRecipes("SwampFruit", STRINGS.ITEMS.FOOD.SWAMPFRUIT.NAME, 0.07065f, conversionCoefficient*30, conversionCoefficient*0.5f);
 
         }
-        public override void DoPostConfigureComplete(GameObject go)
-        {
-            Prioritizable.AddRef(go);
-            CykUtils.LogUtil.Log("机械尖块兽已加载");
-        }
 
         // 添加配方
         // 输入参数：tag：资源标签，name：资源名称，consumedAmount：消耗量，outputAmount0：泥炭产出量 ,outputAmount1：硬肉产出量
@@ -283,6 +279,13 @@ namespace sinevil.Robot_Animal_Remastered
                 TagManager.Create("RobotStego")
             };
         }
+        public override void DoPostConfigureComplete(GameObject go)
+        {
+            Prioritizable.AddRef(go);
+            CykUtils.LogUtil.Log("机械尖块兽已加载");
+        }
+
+
     }
 
     /**
@@ -312,12 +315,6 @@ namespace sinevil.Robot_Animal_Remastered
 
         private float recipeTime = 60f;
 
-        // 配置存储规则（隐藏+保鲜）
-        List<Storage.StoredItemModifier> gasOutputModifiers = new List<Storage.StoredItemModifier>
-        {
-            Storage.StoredItemModifier.Hide,
-            Storage.StoredItemModifier.Preserve
-        };
         public override BuildingDef CreateBuildingDef()
         {
             BuildLocationRule build_location_rule = BuildLocationRule.OnFloor;
@@ -345,7 +342,7 @@ namespace sinevil.Robot_Animal_Remastered
             buildingDef.Overheatable = false;
             buildingDef.RequiresPowerInput = true;
             buildingDef.PowerInputOffset = new CellOffset(0, 0);
-            buildingDef.EnergyConsumptionWhenActive = 60f;
+            buildingDef.EnergyConsumptionWhenActive = 30f;
             buildingDef.ExhaustKilowattsWhenActive = 0.5f;
             buildingDef.SelfHeatKilowattsWhenActive = 1f;
 
@@ -354,7 +351,6 @@ namespace sinevil.Robot_Animal_Remastered
             return buildingDef;
         }
 
-        // Token: 0x0600000C RID: 12 RVA: 0x00002320 File Offset: 0x00000520
         public override void ConfigureBuildingTemplate(GameObject go, Tag prefab_tag)
         {
             go.AddOrGet<DropAllWorkable>();
@@ -367,16 +363,16 @@ namespace sinevil.Robot_Animal_Remastered
             BuildingTemplates.CreateComplexFabricatorStorage(go, complexFabricator);
 
             float KG_CARBON_OUT_FOR_ORE = KG_ROCK_EATEN_PER_CYCLE * CONVERSION_EFFICIENCY_ROCK; //  岩石配方每60s产出的碳量
-            this.AddConfigureRecipes("Sand", ELEMENTS.SAND.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 沙子
-            this.AddConfigureRecipes("SandStone", ELEMENTS.SANDSTONE.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 砂岩
-            this.AddConfigureRecipes("Clay", ELEMENTS.CLAY.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 粘土
-            this.AddConfigureRecipes("CrushedRock", ELEMENTS.CRUSHEDROCK.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 碎石
-            this.AddConfigureRecipes("Dirt", ELEMENTS.DIRT.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 泥土
-            this.AddConfigureRecipes("SedimentaryRock", ELEMENTS.SEDIMENTARYROCK.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 沉积岩
-            this.AddConfigureRecipes("IgneousRock", ELEMENTS.IGNEOUSROCK.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 火成岩
-            this.AddConfigureRecipes("Obsidian", ELEMENTS.OBSIDIAN.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 黑曜石
-            this.AddConfigureRecipes("Granite", ELEMENTS.GRANITE.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 花岗岩
-            this.AddConfigureRecipes("Shale", ELEMENTS.SHALE.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 页岩
+            this.AddConfigureRecipe("Sand", ELEMENTS.SAND.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 沙子
+            this.AddConfigureRecipe("SandStone", ELEMENTS.SANDSTONE.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 砂岩
+            this.AddConfigureRecipe("Clay", ELEMENTS.CLAY.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 粘土
+            this.AddConfigureRecipe("CrushedRock", ELEMENTS.CRUSHEDROCK.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 碎石
+            this.AddConfigureRecipe("Dirt", ELEMENTS.DIRT.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 泥土
+            this.AddConfigureRecipe("SedimentaryRock", ELEMENTS.SEDIMENTARYROCK.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 沉积岩
+            this.AddConfigureRecipe("IgneousRock", ELEMENTS.IGNEOUSROCK.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 火成岩
+            this.AddConfigureRecipe("Obsidian", ELEMENTS.OBSIDIAN.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 黑曜石
+            this.AddConfigureRecipe("Granite", ELEMENTS.GRANITE.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 花岗岩
+            this.AddConfigureRecipe("Shale", ELEMENTS.SHALE.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 页岩
 
 
             Tag carbonTag = EMIT_ELEMENT.CreateTag();
@@ -385,18 +381,18 @@ namespace sinevil.Robot_Animal_Remastered
 
             // 2. 食物饮食配方（对应BaseHatchConfig.FoodDiet）
             List<Diet.Info> foodDiet = BaseHatchConfig.FoodDiet(carbonTag, 0f, CONVERSION_EFFICIENCY_FOOD, null, 0f);
-            GenerateRecipesFromDietInfo(foodDiet, carbonName, CONVERSION_EFFICIENCY_FOOD);
+            GenerateRecipesFromDietInfo(foodDiet, CONVERSION_EFFICIENCY_FOOD);
 
         }
 
         /// <summary>
-        /// 为机械哈奇添加配方
+        /// 为机械机械小动物添加配方
         /// </summary>
         /// <param name="tag">输入物标签</param>
         /// <param name="name">输入物名称</param>
         /// <param name="consumedAmount">消耗量</param>
         /// <param name="outputAmount">煤炭产出量</param>
-        private void AddConfigureRecipes(Tag tag, string name, float consumedAmount, float outputAmount)
+        private void AddConfigureRecipe(Tag tag, string name, float consumedAmount, float outputAmount)
         {
             ComplexRecipe.RecipeElement[] array = new ComplexRecipe.RecipeElement[]
             {
@@ -417,14 +413,14 @@ namespace sinevil.Robot_Animal_Remastered
         }
 
         // 从Diet.Info生成对应配方
-        private void GenerateRecipesFromDietInfo(List<Diet.Info> dietInfos, string outputName, float conversionEfficiency)
+        private void GenerateRecipesFromDietInfo(List<Diet.Info> dietInfos, float conversionEfficiency)
         {
             foreach (Diet.Info dietInfo in dietInfos)
             {
                 foreach (Tag inputTag in dietInfo.consumedTags)
                 {
                     // 获取输入物品名称（兼容元素和食物标签）
-                    string inputName = GetItemDisplayName(inputTag);
+                    string inputName = Utils.GetItemDisplayName(inputTag);
 
                     // 计算消耗/产出量（复用哈奇的每周期消耗量逻辑）
                     float consumedAmount = KG_ROCK_EATEN_PER_CYCLE;
@@ -433,29 +429,11 @@ namespace sinevil.Robot_Animal_Remastered
                     float outputAmount = consumedAmount * conversionEfficiency;
 
                     // 生成单个配方
-                    AddConfigureRecipes(inputTag, inputName, consumedAmount, outputAmount);
+                    AddConfigureRecipe(inputTag, inputName, consumedAmount, outputAmount);
                 }
             }
         }
 
-
-
-        // 辅助方法：获取物品显示名称（兼容元素/食物）
-        private string GetItemDisplayName(Tag tag)
-        {
-            // 优先尝试获取元素名称
-            Element element = ElementLoader.FindElementByTag(tag);
-            if (element != null) return element.name;
-            // 尝试获取食物名称
-            StringEntry foodName;
-            if (Strings.TryGet(new StringKey($"STRINGS.ITEMS.FOOD.{tag.ToString().ToUpper()}.NAME"), out foodName))
-            {
-                return foodName;
-            }
-
-            // 兜底返回标签名
-            return tag.ToString();
-        }
 
         // 辅助方法：调整食物类物品的消耗量（避免与岩石使用相同的14kg）
         private float GetFoodAdjustedConsumption(Tag foodTag)
@@ -476,9 +454,214 @@ namespace sinevil.Robot_Animal_Remastered
         public override void DoPostConfigureComplete(GameObject go)
         {
             Prioritizable.AddRef(go);
+            CykUtils.LogUtil.Log("机械哈奇已加载");
+        }
+    }
+
+    /**
+     * 机械帕库鱼
+     */
+    public class RobotPacuConfig : IBuildingConfig
+    {
+        // 建筑唯一ID
+        private const string ID = "RobotPacu";
+        // 基础建筑属性常量
+        private const int BUILD_WIDTH = 1;
+        private const int BUILD_HEIGHT = 1;
+        // 建筑动画名称
+        private const string ANIM = "RobotPacu_kanim";
+        // 建筑生命值
+        private const int HIT_POINTS = 100;
+        // 施工时间
+        private const float CONSTRUCTION_TIME = 10f;
+        // 熔点 75摄氏度
+        private const float MELTING_POINT = 167;
+
+        private float recipeTime = 60f;
+
+        private float CONVERSION_EFFICIENCY = Configration.config.robotPacu_Conversion_Coefficient; // 食物转化效率
+
+        public override BuildingDef CreateBuildingDef()
+        {
+            BuildLocationRule build_location_rule = BuildLocationRule.OnFloor;
+            string[] constructionMaterials = { "METAL" };
+            float[] constructionMass = { BUILDINGS.CONSTRUCTION_MASS_KG.TIER1[0] };
+
+            // 创建建筑定义
+            BuildingDef buildingDef = BuildingTemplates.CreateBuildingDef(
+                id: ID,
+                width: BUILD_WIDTH,
+                height: BUILD_HEIGHT,
+                anim: ANIM,
+                hitpoints: HIT_POINTS,
+                construction_time: CONSTRUCTION_TIME,
+                construction_mass: constructionMass,
+                construction_materials: constructionMaterials,
+                melting_point: MELTING_POINT,
+                build_location_rule: build_location_rule,
+                decor: BUILDINGS.DECOR.PENALTY.TIER1,
+                noise: NOISE_POLLUTION.NOISY.TIER5,
+                0.2f
+            );
+
+            // 建筑特殊属性配置
+            buildingDef.Overheatable = false;
+            buildingDef.RequiresPowerInput = true;
+            buildingDef.PowerInputOffset = new CellOffset(0, 0);
+            buildingDef.EnergyConsumptionWhenActive = 30f;
+            buildingDef.ExhaustKilowattsWhenActive = 0.5f;
+            buildingDef.SelfHeatKilowattsWhenActive = 0.5f;
+
+            buildingDef.AudioCategory = "HollowMetal";
+
+            return buildingDef;
+        }
+
+        public override void ConfigureBuildingTemplate(GameObject go, Tag prefab_tag)
+        {
+            go.AddOrGet<DropAllWorkable>();
+            go.AddOrGet<BuildingComplete>().isManuallyOperated = false;
+            ComplexFabricator complexFabricator = go.AddOrGet<ComplexFabricator>();
+            complexFabricator.heatedTemperature = 353.15f;
+            complexFabricator.duplicantOperated = false;
+            complexFabricator.showProgressBar = false;
+            go.AddOrGet<FabricatorIngredientStatusManager>();
+            BuildingTemplates.CreateComplexFabricatorStorage(go, complexFabricator);
+
+            // 1. 藻类和海梳蕨叶配方
+            AddConfigureRecipe(SimHashes.Algae.CreateTag(), 0.75f, 0.38f * CONVERSION_EFFICIENCY);
+            AddConfigureRecipe(KelpConfig.ID, 2f, 1f * CONVERSION_EFFICIENCY);
+
+
+            // 2. 种子饮食配方（对应BasePacuConfig.SeedDiet）
+            //List<Diet.Info> seedDiet = BasePacuConfig.SeedDiet(SimHashes.ToxicSand.CreateTag(), 0f, TUNING.CREATURES.CONVERSION_EFFICIENCY.NORMAL);
+            List<Tag> seedTags = new List<Tag>();
+            { 
+                seedTags.Add("ColdWheatSeed"); // 冰霜麦粒
+                seedTags.Add("DewDripperPlantSeed"); // 露珠藤种子
+                seedTags.Add("FlyTrapPlantSeed"); // 露饵花种子
+                seedTags.Add("GardenFoodPlantSeed"); // 汗甜玉米种子
+                seedTags.Add("GasGrassSeed"); // 释气草种子
+                seedTags.Add("HardSkinBerryPlantSeed"); // 刺壳果灌木种子
+                seedTags.Add("CarrotPlantSeed"); // 羽叶果薯种子
+                seedTags.Add("ButterflyPlantSeed"); // 拟种
+                seedTags.Add("BasicFabricMaterialPlantSeed"); // 顶针芦苇种子
+                seedTags.Add("BasicSingleHarvestPlantSeed"); // 米虱木种子
+                seedTags.Add("BeanPlantSeed"); // 小吃豆
+                seedTags.Add("BlueGrassSeed"); // 气囊芦荟种子
+                seedTags.Add("MushroomSeed"); // 夜幕菇孢子
+                seedTags.Add("SwampLilySeed"); // 芳香百合种子
+                seedTags.Add("SaltPlantSeed"); // 沙盐藤种子
+                seedTags.Add("SwampHarvestPlantSeed"); // 沼浆笼种子
+                seedTags.Add("SeaLettuceSeed"); // 水草种子
+                seedTags.Add("SpiceVineSeed"); // 火椒种子
+                seedTags.Add("WormPlantSeed"); // 虫果种子
+                seedTags.Add("SpaceTreeSeed"); // 糖心树种子
+                seedTags.Add("PrickleFlowerSeed"); // 毛刺花种子
+
+                seedTags.Add("SnowSculptures_PineCone"); // mod 圣诞树_松果
+
+
+            }
+
+            GenerateRecipesFromTags(seedTags : seedTags, CONVERSION_EFFICIENCY);
+
+        }
+
+        /// <summary>
+        /// 为机械机械小动物添加配方
+        /// </summary>
+        /// <param name="tag">输入物标签</param>
+        /// <param name="name">输入物名称</param>
+        /// <param name="consumedAmount">消耗量</param>
+        /// <param name="outputAmount">产出量</param>
+        private void AddConfigureRecipe(Tag tag, float consumedAmount, float outputAmount)
+        {
+            AddConfigureRecipe(new List<Tag> { tag }, new List<float> { consumedAmount }, new List<Tag> { SimHashes.ToxicSand.CreateTag() }, new List<float> { outputAmount } , recipeTime);
+        }
+
+        /// <summary>
+        /// 为机械机械小动物添加配方
+        /// </summary>
+        /// <param name="inTags">输入物标签列表</param>
+        /// <param name="consumedAmounts">输入物消耗量列表</param>
+        /// <param name="outTags">输出物标签列表</param>
+        /// <param name="outputAmounts">输出物产量列表</param>
+        /// <param name="recipeTime">配方时间</param>
+        private void AddConfigureRecipe(List<Tag> inTags, List<float> consumedAmounts,List<Tag> outTags, List<float> outputAmounts, float recipeTime)
+        {
+            // 步骤1：创建临时列表存储批量生成的RecipeElement
+            List<ComplexRecipe.RecipeElement> array = new List<ComplexRecipe.RecipeElement>();
+            List<ComplexRecipe.RecipeElement> array2 = new List<ComplexRecipe.RecipeElement>();
+            // 步骤2：遍历inTags和consumedAmounts，批量添加元素
+            for (int i = 0; i < inTags.Count; i++)
+                array.Add(new ComplexRecipe.RecipeElement(inTags[i], consumedAmounts[i]));
+            
+            // 步骤3：遍历outTags和outputAmounts，批量添加元素
+            for (int i = 0; i < outTags.Count; i++)
+                array2.Add(new ComplexRecipe.RecipeElement(outTags[i], outputAmounts[i]));
+
+            ComplexRecipe complexRecipe = new ComplexRecipe(ComplexRecipeManager.MakeRecipeID(ID, array, array2), array.ToArray(), array2.ToArray());
+            complexRecipe.time = recipeTime;
+
+            // 拼接输入物字符串
+            string inString = "";
+            for (int i = 0; i < inTags.Count; i++)
+            {
+                
+                inString += Utils.GetItemDisplayName(inTags[i]);
+                if (i < inTags.Count - 1) inString += ", ";
+            }
+            // 拼接输出物字符串
+            string outString = "";
+            for (int i = 0; i < outTags.Count; i++)
+            {
+                outString += Utils.GetItemDisplayName(outTags[i]);
+                if (i < outTags.Count - 1) outString += ", ";
+            }
+            complexRecipe.description = string.Format(STRINGS.BUILDINGS.PREFABS.CRAFTINGTABLE.RECIPE_DESCRIPTION, inString, outString);
+            complexRecipe.nameDisplay = ComplexRecipe.RecipeNameDisplay.IngredientToResult;
+            complexRecipe.fabricators = new List<Tag>
+            {
+                TagManager.Create(ID)
+            };
         }
 
 
+        /// <summary>
+        /// 为机械帕库鱼批量添加配方
+        /// 每颗种子转化为500g污染土
+        /// </summary>
+        /// <param name="dietInfos"></param>
+        /// <param name="outputName"></param>
+        /// <param name="conversionEfficiency"></param>
+        private void GenerateRecipesFromTags(List<Tag> seedTags, float conversionEfficiency)
+        {
+            // 产物列表
+            List<Tag> productList = new List<Tag> { SimHashes.ToxicSand.CreateTag(), TagExtensions.ToTag("FishMeat"), TagExtensions.ToTag("PacuEgg") };
+            // 产物数量
+            List<float> outputAmountsList = new List<float> { 0.5f * conversionEfficiency, 0.025f * conversionEfficiency, 1f * conversionEfficiency };
+
+            CykUtils.LogUtil.Log("为机械帕库鱼添加" + seedTags.Count + "个种子配方 ");
+            foreach (Tag inputTag in seedTags)
+            {
+                AddConfigureRecipe(
+                    new List<Tag> { inputTag },
+                    new List<float> { 10 },
+                    productList,
+                    outputAmountsList,
+                    120f
+                    );
+            }
+
+        }
+
+
+        public override void DoPostConfigureComplete(GameObject go)
+        {
+            Prioritizable.AddRef(go);
+            CykUtils.LogUtil.Log("机械帕库鱼已加载");
+        }
     }
 
 }

@@ -33,6 +33,14 @@ namespace sinevil.Robot_Animal_Remastered
         public float robotHatch_Food_Conversion_Coefficient { get; set; } = 0.75f;
 
         /// <summary>
+        /// 帕库鱼配方转换系数
+        /// </summary>
+        [Option(ConfigStrings.PacuConversionCoefficient, "", ConfigStrings.category, Format = "F1")]
+        [Limit(0, 10)]
+        [JsonProperty]
+        public float robotPacu_Conversion_Coefficient { get; set; } = 1f;
+
+        /// <summary>
         /// 蛞蝓配方转换系数
         /// </summary>
         [Option(ConfigStrings.StaterpillarConversionCoefficient, "", ConfigStrings.category, Format = "F1")]
@@ -57,6 +65,8 @@ namespace sinevil.Robot_Animal_Remastered
 
         public const string Hatch_Rock_ConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotHatch_UI.ROCK_CONVERSION_COEFFICIENT";
         public const string Hatch_Food_ConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotHatch_UI.FOOD_CONVERSION_COEFFICIENT";
+
+        public const string PacuConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotPacu_UI.CONVERSION_COEFFICIENT";
 
         public const string StaterpillarConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotStaterpillar_UI.CONVERSION_COEFFICIENT";
         public const string StegoConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotStego_UI.CONVERSION_COEFFICIENT";
