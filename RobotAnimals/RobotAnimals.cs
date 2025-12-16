@@ -1,9 +1,11 @@
-﻿using PeterHan.PLib.Options;
+﻿using CykUtils;
+using PeterHan.PLib.Options;
 using STRINGS;
 using System.Collections.Generic;
 using System.Linq;
 using TUNING;
 using UnityEngine;
+using static STRINGS.DUPLICANTS.TRAITS;
 using BUILDINGS = TUNING.BUILDINGS;
 
 namespace sinevil.Robot_Animal_Remastered
@@ -308,7 +310,7 @@ namespace sinevil.Robot_Animal_Remastered
         private const float MELTING_POINT = 167;
 
         // 复用哈奇的饮食常量（与原版逻辑对齐）
-        private const SimHashes EMIT_ELEMENT = SimHashes.Carbon;
+        private Tag EMIT_ELEMENT = SimHashes.Carbon.CreateTag();
         private static float KG_ROCK_EATEN_PER_CYCLE = 14f; // 每60s吃掉的矿石质量
         private float CONVERSION_EFFICIENCY_ROCK = Configration.config.robotHatch_Rock_Conversion_Coefficient; // 岩石转换效率
         private float CONVERSION_EFFICIENCY_FOOD = Configration.config.robotHatch_Food_Conversion_Coefficient; // 食物转化效率
@@ -375,12 +377,12 @@ namespace sinevil.Robot_Animal_Remastered
             this.AddConfigureRecipe("Shale", ELEMENTS.SHALE.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 页岩
 
 
-            Tag carbonTag = EMIT_ELEMENT.CreateTag();
             string carbonName = ELEMENTS.CARBON.NAME;
 
 
             // 2. 食物饮食配方（对应BaseHatchConfig.FoodDiet）
-            List<Diet.Info> foodDiet = BaseHatchConfig.FoodDiet(carbonTag, 0f, CONVERSION_EFFICIENCY_FOOD, null, 0f);
+            List<Diet.Info> foodDiet = BaseHatchConfig.FoodDiet(EMIT_ELEMENT, 0f, CONVERSION_EFFICIENCY_FOOD, null, 0f);
+            CykUtils.LogUtil.Log($"机械哈奇已获取{foodDiet.Count} 个食物食谱");
             GenerateRecipesFromDietInfo(foodDiet, CONVERSION_EFFICIENCY_FOOD);
 
         }
@@ -534,7 +536,10 @@ namespace sinevil.Robot_Animal_Remastered
 
 
             // 2. 种子饮食配方（对应BasePacuConfig.SeedDiet）
-            //List<Diet.Info> seedDiet = BasePacuConfig.SeedDiet(SimHashes.ToxicSand.CreateTag(), 0f, TUNING.CREATURES.CONVERSION_EFFICIENCY.NORMAL);
+            //List<Diet.Info> seedDiet = BasePacuConfig.SeedDiet(SimHashes.ToxicSand.CreateTag(), PacuTuning.STANDARD_CALORIES_PER_CYCLE, TUNING.CREATURES.CONVERSION_EFFICIENCY.NORMAL);
+            //CykUtils.LogUtil.Log($"机械帕库鱼已获取{seedDiet.Count} 个种子食谱");
+
+
             List<Tag> seedTags = new List<Tag>();
             { 
                 seedTags.Add("ColdWheatSeed"); // 冰霜麦粒
@@ -664,4 +669,241 @@ namespace sinevil.Robot_Animal_Remastered
         }
     }
 
+
+    /**
+     * 机械抛壳蟹
+     */
+    public class RobotPokeshellConfig : IBuildingConfig
+    {
+        // 建筑唯一ID
+        private const string ID = "RobotPokeshell";
+        // 基础建筑属性常量
+        private const int BUILD_WIDTH = 1;
+        private const int BUILD_HEIGHT = 2;
+        // 建筑动画名称
+        private const string ANIM = "RobotPokeshell_kanim";
+        // 建筑生命值
+        private const int HIT_POINTS = 100;
+        // 施工时间
+        private const float CONSTRUCTION_TIME = 10f;
+        // 熔点 75摄氏度
+        private const float MELTING_POINT = 167;
+
+        private float recipeTime = 60f;
+
+        private float CONVERSION_EFFICIENCY = Configration.config.robotPokeshell_Conversion_Coefficient; // 配方转化效率
+
+        public override BuildingDef CreateBuildingDef()
+        {
+            BuildLocationRule build_location_rule = BuildLocationRule.OnFloor;
+            string[] constructionMaterials = { "METAL" };
+            float[] constructionMass = { BUILDINGS.CONSTRUCTION_MASS_KG.TIER1[0] };
+
+            // 创建建筑定义
+            BuildingDef buildingDef = BuildingTemplates.CreateBuildingDef(
+                id: ID,
+                width: BUILD_WIDTH,
+                height: BUILD_HEIGHT,
+                anim: ANIM,
+                hitpoints: HIT_POINTS,
+                construction_time: CONSTRUCTION_TIME,
+                construction_mass: constructionMass,
+                construction_materials: constructionMaterials,
+                melting_point: MELTING_POINT,
+                build_location_rule: build_location_rule,
+                decor: BUILDINGS.DECOR.PENALTY.TIER1,
+                noise: NOISE_POLLUTION.NOISY.TIER5,
+                0.2f
+            );
+            // 建筑特殊属性配置
+            buildingDef.Overheatable = false;
+            buildingDef.RequiresPowerInput = true;
+            buildingDef.PowerInputOffset = new CellOffset(0, 0);
+            buildingDef.EnergyConsumptionWhenActive = 30f;
+            buildingDef.ExhaustKilowattsWhenActive = 0.5f;
+            buildingDef.SelfHeatKilowattsWhenActive = 0.5f;
+
+            buildingDef.AudioCategory = "HollowMetal";
+
+            return buildingDef;
+        }
+        public override void ConfigureBuildingTemplate(GameObject go, Tag prefab_tag)
+        {
+            go.AddOrGet<DropAllWorkable>();
+            go.AddOrGet<BuildingComplete>().isManuallyOperated = false;
+            ComplexFabricator complexFabricator = go.AddOrGet<ComplexFabricator>();
+            complexFabricator.heatedTemperature = 353.15f;
+            complexFabricator.duplicantOperated = false;
+            complexFabricator.showProgressBar = false;
+            go.AddOrGet<FabricatorIngredientStatusManager>();
+            BuildingTemplates.CreateComplexFabricatorStorage(go, complexFabricator);
+
+            List<Tag> inTags = new List<Tag>() { SimHashes.ToxicSand.CreateTag() };
+            List<float> consumedAmounts = new List<float>() { 7f };
+            AddConfigureRecipe(inTags, consumedAmounts, 
+                new List<Tag> { "CrabShell", SimHashes.Sand.CreateTag()}, 
+                new List<float> { 1f * CONVERSION_EFFICIENCY, 0.02f * CONVERSION_EFFICIENCY },
+                recipeTime);
+            AddConfigureRecipe(inTags, consumedAmounts,
+                new List<Tag> { "ShellfishMeat", SimHashes.Sand.CreateTag() },
+                new List<float> { 0.4f * CONVERSION_EFFICIENCY, 0.02f * CONVERSION_EFFICIENCY },
+                recipeTime);
+
+        }
+
+
+        /// <summary>
+        /// 为机械机械小动物添加配方
+        /// </summary>
+        /// <param name="inTags">输入物标签列表</param>
+        /// <param name="consumedAmounts">输入物消耗量列表</param>
+        /// <param name="outTags">输出物标签列表</param>
+        /// <param name="outputAmounts">输出物产量列表</param>
+        /// <param name="recipeTime">配方时间</param>
+        private void AddConfigureRecipe(List<Tag> inTags, List<float> consumedAmounts, List<Tag> outTags, List<float> outputAmounts, float recipeTime)
+        {
+            // 步骤1：创建临时列表存储批量生成的RecipeElement
+            List<ComplexRecipe.RecipeElement> array = new List<ComplexRecipe.RecipeElement>();
+            List<ComplexRecipe.RecipeElement> array2 = new List<ComplexRecipe.RecipeElement>();
+            // 步骤2：遍历inTags和consumedAmounts，批量添加元素
+            for (int i = 0; i < inTags.Count; i++)
+                array.Add(new ComplexRecipe.RecipeElement(inTags[i], consumedAmounts[i]));
+
+            // 步骤3：遍历outTags和outputAmounts，批量添加元素
+            for (int i = 0; i < outTags.Count; i++)
+                array2.Add(new ComplexRecipe.RecipeElement(outTags[i], outputAmounts[i]));
+
+            ComplexRecipe complexRecipe = new ComplexRecipe(ComplexRecipeManager.MakeRecipeID(ID, array, array2), array.ToArray(), array2.ToArray());
+            complexRecipe.time = recipeTime;
+
+            // 拼接输入物字符串
+            string inString = "";
+            for (int i = 0; i < inTags.Count; i++)
+            {
+
+                inString += Utils.GetItemDisplayName(inTags[i]);
+                if (i < inTags.Count - 1) inString += ", ";
+            }
+            // 拼接输出物字符串
+            string outString = "";
+            for (int i = 0; i < outTags.Count; i++)
+            {
+                outString += Utils.GetItemDisplayName(outTags[i]);
+                if (i < outTags.Count - 1) outString += ", ";
+            }
+            complexRecipe.description = string.Format(STRINGS.BUILDINGS.PREFABS.CRAFTINGTABLE.RECIPE_DESCRIPTION, inString, outString);
+            complexRecipe.nameDisplay = ComplexRecipe.RecipeNameDisplay.IngredientToResult;
+            complexRecipe.fabricators = new List<Tag>
+            {
+                TagManager.Create(ID)
+            };
+        }
+        public override void DoPostConfigureComplete(GameObject go)
+        {
+            Prioritizable.AddRef(go);
+            CykUtils.LogUtil.Log("机械抛壳蟹已加载");
+        }
+    }
+
+    /**
+ * 机械抛壳蟹
+ */
+    public class RobotPuftConfig : IBuildingConfig
+    {
+        // 建筑唯一ID
+        private const string ID = "RobotPuft";
+        // 基础建筑属性常量
+        private const int BUILD_WIDTH = 1;
+        private const int BUILD_HEIGHT = 2;
+        // 建筑动画名称
+        private const string ANIM = "RobotPuft_kanim";
+        // 建筑生命值
+        private const int HIT_POINTS = 100;
+        // 施工时间
+        private const float CONSTRUCTION_TIME = 10f;
+        // 熔点 75摄氏度
+        private const float MELTING_POINT = 167;
+
+
+        private float CONVERSION_EFFICIENCY = Configration.config.robotPuft_Conversion_Coefficient; // 配方转化效率
+
+        public override BuildingDef CreateBuildingDef()
+        {
+            BuildLocationRule build_location_rule = BuildLocationRule.Anywhere;
+            string[] constructionMaterials = { "METAL" };
+            float[] constructionMass = { BUILDINGS.CONSTRUCTION_MASS_KG.TIER1[0] };
+
+            // 创建建筑定义
+            BuildingDef buildingDef = BuildingTemplates.CreateBuildingDef(
+                id: ID,
+                width: BUILD_WIDTH,
+                height: BUILD_HEIGHT,
+                anim: ANIM,
+                hitpoints: HIT_POINTS,
+                construction_time: CONSTRUCTION_TIME,
+                construction_mass: constructionMass,
+                construction_materials: constructionMaterials,
+                melting_point: MELTING_POINT,
+                build_location_rule: build_location_rule,
+                decor: BUILDINGS.DECOR.PENALTY.TIER1,
+                noise: NOISE_POLLUTION.NOISY.TIER5,
+                0.2f
+            );
+            // 建筑特殊属性配置
+            buildingDef.Overheatable = false;
+            buildingDef.RequiresPowerInput = true;
+            buildingDef.PowerInputOffset = new CellOffset(0, 0);
+            buildingDef.EnergyConsumptionWhenActive = 60f;
+            buildingDef.ExhaustKilowattsWhenActive = 0.5f;
+            buildingDef.SelfHeatKilowattsWhenActive = 0.5f;
+
+            buildingDef.AudioCategory = "HollowMetal";
+
+            return buildingDef;
+        }
+        public override void ConfigureBuildingTemplate(GameObject go, Tag prefab_tag)
+        {
+            go.AddOrGet<LoopingSounds>();
+            Prioritizable.AddRef(go);
+            Storage storage = BuildingTemplates.CreateDefaultStorage(go, false);
+            storage.showInUI = true;
+            storage.capacityKg = 200f;
+            storage.SetDefaultStoredItemModifiers(Storage.StandardSealedStorage);
+            ElementConsumer elementConsumer = go.AddOrGet<ElementConsumer>();
+            elementConsumer.elementToConsume = SimHashes.ContaminatedOxygen;
+            elementConsumer.consumptionRate = 2f;
+            elementConsumer.capacityKG = 5f;
+            elementConsumer.consumptionRadius = 3;
+            elementConsumer.showInStatusPanel = true;
+            elementConsumer.sampleCellOffset = new Vector3(0f, 0f, 0f);
+            elementConsumer.isRequired = false;
+            elementConsumer.storeOnConsume = true;
+            elementConsumer.showDescriptor = false;
+            elementConsumer.ignoreActiveChanged = true;
+            ElementDropper elementDropper = go.AddComponent<ElementDropper>();
+            elementDropper.emitMass = 10f;
+            elementDropper.emitTag = SimHashes.SlimeMold.CreateTag();
+            elementDropper.emitOffset = new Vector3(0f, 0f, 0f);
+            ElementConverter elementConverter = go.AddOrGet<ElementConverter>();
+            elementConverter.consumedElements = new ElementConverter.ConsumedElement[]
+            {
+                new ElementConverter.ConsumedElement(SimHashes.ContaminatedOxygen.CreateTag(), 0.1f, true)
+            };
+            elementConverter.outputElements = new ElementConverter.OutputElement[]
+            {
+                new ElementConverter.OutputElement(0.1f*CONVERSION_EFFICIENCY, SimHashes.SlimeMold, 0f, false, true, 0f, 0.5f, 0.25f, byte.MaxValue, 0, true)
+            };
+            go.AddOrGet<MyAirFilter>();
+            go.AddOrGet<KBatchedAnimController>().randomiseLoopedOffset = true;
+
+
+
+        }
+
+        public override void DoPostConfigureComplete(GameObject go)
+        {
+            Prioritizable.AddRef(go);
+            CykUtils.LogUtil.Log("机械喷浮飞鱼已加载");
+        }
+    }
 }
