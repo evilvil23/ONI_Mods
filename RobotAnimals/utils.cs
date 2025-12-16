@@ -36,6 +36,10 @@ namespace sinevil.Robot_Animal_Remastered
             {
                 return name;
             }
+            if (tag.ToString().EndsWith("Config") && Strings.TryGet(new StringKey($"STRINGS.ITEMS.INGREDIENTS.{RemoveConfigSuffix(tag.ToString()).ToUpper()}.NAME"), out name))
+            {
+                return name;
+            }
             // 兜底返回标签名
             return tag.ToString();
         }
@@ -47,8 +51,19 @@ namespace sinevil.Robot_Animal_Remastered
         /// <param name="input">输入字符串</param>
         /// <returns></returns>
         public static string RemoveSeedSuffix(string input) =>
-            !string.IsNullOrEmpty(input) && input.EndsWith("Seed")
-                ? input.Substring(0, input.Length - 4)
-                : input;
+            !string.IsNullOrEmpty(input)
+            ? input.Substring(0, input.Length - 4)
+            : input;
+
+
+        /// <summary>
+        /// 去除字符串末尾的“Config”
+        /// </summary>
+        /// <param name="input">输入字符串</param>
+        /// <returns></returns>
+        public static string RemoveConfigSuffix(string input) =>
+            !string.IsNullOrEmpty(input)
+            ? input.Substring(0, input.Length - 6)
+            : input;
     }
 }

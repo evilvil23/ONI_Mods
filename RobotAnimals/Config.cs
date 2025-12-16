@@ -57,6 +57,14 @@ namespace sinevil.Robot_Animal_Remastered
         public float robotPuft_Conversion_Coefficient { get; set; } = 0.95f;
 
         /// <summary>
+        /// 锹环田鼠配方转换系数
+        /// </summary>
+        [Option(ConfigStrings.ShoveVoleConversionCoefficient, "", ConfigStrings.category, Format = "F1")]
+        [Limit(0, 10)]
+        [JsonProperty]
+        public float robotShoveVole_Conversion_Coefficient { get; set; } = 1f;
+
+        /// <summary>
         /// 蛞蝓配方转换系数
         /// </summary>
         [Option(ConfigStrings.StaterpillarConversionCoefficient, "", ConfigStrings.category, Format = "F1")]
@@ -85,6 +93,7 @@ namespace sinevil.Robot_Animal_Remastered
         public const string PacuConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotPacu_UI.CONVERSION_COEFFICIENT";
         public const string PokeshellConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotPokeshell_UI.CONVERSION_COEFFICIENT";
         public const string PuftConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotPuft_UI.CONVERSION_COEFFICIENT";
+        public const string ShoveVoleConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotShoveVole_UI.CONVERSION_COEFFICIENT";
 
         public const string StaterpillarConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotStaterpillar_UI.CONVERSION_COEFFICIENT";
         public const string StegoConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotStego_UI.CONVERSION_COEFFICIENT";

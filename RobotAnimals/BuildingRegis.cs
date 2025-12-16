@@ -70,7 +70,12 @@ namespace sinevil.Robot_Animal_Remastered.utils
                 RobotAnimalSTRINGS.BUILDINGS.RobotPuft.NAME,
                 RobotAnimalSTRINGS.BUILDINGS.RobotPuft.DESC,
                 RobotAnimalSTRINGS.BUILDINGS.RobotPuft.EFFECT
-    );
+            );
+            AddToBuild.Add("RobotShoveVole",
+                RobotAnimalSTRINGS.BUILDINGS.RobotShoveVole.NAME,
+                RobotAnimalSTRINGS.BUILDINGS.RobotShoveVole.DESC,
+                RobotAnimalSTRINGS.BUILDINGS.RobotShoveVole.EFFECT
+            );
         }
     }
 
@@ -87,6 +92,7 @@ namespace sinevil.Robot_Animal_Remastered.utils
             unlockedItemIDs.Add("RobotPacu");
             unlockedItemIDs.Add("RobotPokeshell");
             unlockedItemIDs.Add("RobotPuft");
+            unlockedItemIDs.Add("RobotShoveVole");
         }
     }
 

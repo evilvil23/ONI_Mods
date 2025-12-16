@@ -46,6 +46,12 @@
                 public static LocString EFFECT = "喷浮飞鱼和它的不同亚种以不同的气体作为食物。在吸入对应的气体后，它们会排泄出会对应的固体物质。";
                 public static LocString DESC = "喷浮飞鱼是一种可以在空中（包括真空）飞行的小动物，常见于湿地生态。";
             }
+            public class RobotShoveVole
+            {
+                public static LocString NAME = "机械锹环田鼠";
+                public static LocString EFFECT = "珍馐田鼠的身上会生长羽刺，可以使用修剪站来收获这些羽刺来获得滋补根。";
+                public static LocString DESC = "锹环田鼠是一种能够钻入固体砖块中并移动的小动物，常见于太空生态。它们可以进食浮土并食量巨大。";
+            }
         }
 
         public class CONFIGURATIONITEM
@@ -77,7 +83,10 @@
             {
                 public static LocString CONVERSION_COEFFICIENT = "机械喷浮飞鱼转化系数";
             }
-
+            public class RobotShoveVole_UI
+            {
+                public static LocString CONVERSION_COEFFICIENT = "机械锹环田鼠转化系数";
+            }
 
         }
             
