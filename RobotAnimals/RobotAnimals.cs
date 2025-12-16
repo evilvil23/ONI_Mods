@@ -813,8 +813,8 @@ namespace sinevil.Robot_Animal_Remastered
         // 建筑唯一ID
         private const string ID = "RobotPuft";
         // 基础建筑属性常量
-        private const int BUILD_WIDTH = 1;
-        private const int BUILD_HEIGHT = 2;
+        private const int BUILD_WIDTH = 2;
+        private const int BUILD_HEIGHT = 1;
         // 建筑动画名称
         private const string ANIM = "RobotPuft_kanim";
         // 建筑生命值
@@ -916,7 +916,7 @@ namespace sinevil.Robot_Animal_Remastered
         private const string ID = "RobotShoveVole";
         // 基础建筑属性常量
         private const int BUILD_WIDTH = 1;
-        private const int BUILD_HEIGHT = 2;
+        private const int BUILD_HEIGHT = 1;
         // 建筑动画名称
         private const string ANIM = "RobotShoveVole_kanim";
         // 建筑生命值
@@ -1054,5 +1054,104 @@ namespace sinevil.Robot_Animal_Remastered
             Prioritizable.AddRef(go);
             CykUtils.LogUtil.Log("机械锹环田鼠已加载");
         }
+    }
+
+    /**
+     * 机械浮游生物
+     */
+    public class RobotSlicksterConfig : IBuildingConfig
+    {
+        // 建筑唯一ID
+        private const string ID = "RobotSlickster";
+        // 基础建筑属性常量
+        private const int BUILD_WIDTH = 1;
+        private const int BUILD_HEIGHT = 1;
+        // 建筑动画名称
+        private const string ANIM = "RobotSlickster_kanim";
+        // 建筑生命值
+        private const int HIT_POINTS = 100;
+        // 施工时间
+        private const float CONSTRUCTION_TIME = 10f;
+        // 熔点 75摄氏度
+        private const float MELTING_POINT = 167;
+
+
+        private float CONVERSION_EFFICIENCY = Configration.config.robotSlickster_Conversion_Coefficient; // 配方转化效率
+
+        public override BuildingDef CreateBuildingDef()
+        {
+            BuildLocationRule build_location_rule = BuildLocationRule.OnFloor;
+            string[] constructionMaterials = { "METAL" };
+            float[] constructionMass = { BUILDINGS.CONSTRUCTION_MASS_KG.TIER1[0] };
+
+            // 创建建筑定义
+            BuildingDef buildingDef = BuildingTemplates.CreateBuildingDef(
+                id: ID,
+                width: BUILD_WIDTH,
+                height: BUILD_HEIGHT,
+                anim: ANIM,
+                hitpoints: HIT_POINTS,
+                construction_time: CONSTRUCTION_TIME,
+                construction_mass: constructionMass,
+                construction_materials: constructionMaterials,
+                melting_point: MELTING_POINT,
+                build_location_rule: build_location_rule,
+                decor: BUILDINGS.DECOR.PENALTY.TIER1,
+                noise: NOISE_POLLUTION.NOISY.TIER5,
+                0.2f
+            );
+            // 建筑特殊属性配置
+            buildingDef.Overheatable = false;
+            buildingDef.RequiresPowerInput = true;
+            buildingDef.PowerInputOffset = new CellOffset(0, 0);
+            buildingDef.EnergyConsumptionWhenActive = 30f;
+            buildingDef.ExhaustKilowattsWhenActive = 0.5f;
+            buildingDef.SelfHeatKilowattsWhenActive = 0.5f;
+
+            buildingDef.AudioCategory = "HollowMetal";
+
+            return buildingDef;
+        }
+
+        // Token: 0x06000020 RID: 32 RVA: 0x000031C4 File Offset: 0x000013C4
+        public override void ConfigureBuildingTemplate(GameObject go, Tag prefab_tag)
+        {
+            Storage storage = BuildingTemplates.CreateDefaultStorage(go, false);
+            storage.showInUI = true;
+            storage.capacityKg = 200f;
+            storage.SetDefaultStoredItemModifiers(Storage.StandardSealedStorage);
+            ElementConsumer elementConsumer = go.AddOrGet<ElementConsumer>();
+            elementConsumer.elementToConsume = SimHashes.CarbonDioxide;
+            elementConsumer.consumptionRate = 0.5f;
+            elementConsumer.capacityKG = 5f;
+            elementConsumer.consumptionRadius = 3;
+            elementConsumer.showInStatusPanel = true;
+            elementConsumer.sampleCellOffset = new Vector3(0f, 0f, 0f);
+            elementConsumer.isRequired = false;
+            elementConsumer.storeOnConsume = true;
+            elementConsumer.showDescriptor = false;
+            elementConsumer.ignoreActiveChanged = true;
+            ElementConverter elementConverter = go.AddOrGet<ElementConverter>();
+            elementConverter.consumedElements = new ElementConverter.ConsumedElement[]
+            {
+                new ElementConverter.ConsumedElement(SimHashes.CarbonDioxide.CreateTag(), 0.2f, true)
+            };
+            elementConverter.outputElements = new ElementConverter.OutputElement[]
+            {
+                new ElementConverter.OutputElement(0.2f*CONVERSION_EFFICIENCY, SimHashes.CrudeOil, 0f, false, false, 0f, 0.5f, 0.25f, byte.MaxValue, 0, true)
+            };
+            go.AddOrGet<MyAirFilter>();
+        }
+
+        // Token: 0x06000021 RID: 33 RVA: 0x000032D3 File Offset: 0x000014D3
+        public override void DoPostConfigureComplete(GameObject go)
+        {
+            Prioritizable.AddRef(go);
+            go.AddOrGet<LoopingSounds>();
+            go.AddOrGetDef<ActiveController.Def>();
+            go.AddOrGet<KBatchedAnimController>().randomiseLoopedOffset = true;
+        }
+
+        
     }
 }

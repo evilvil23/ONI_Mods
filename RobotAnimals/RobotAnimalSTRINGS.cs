@@ -52,6 +52,12 @@
                 public static LocString EFFECT = "珍馐田鼠的身上会生长羽刺，可以使用修剪站来收获这些羽刺来获得滋补根。";
                 public static LocString DESC = "锹环田鼠是一种能够钻入固体砖块中并移动的小动物，常见于太空生态。它们可以进食浮土并食量巨大。";
             }
+            public class RobotSlickster
+            {
+                public static LocString NAME = "机械浮油生物";
+                public static LocString EFFECT = "浮油生物能将二氧化碳转化为原油。";
+                public static LocString DESC = "浮油生物是一种悬浮生物，常见于油质生态。浮油生物能够悬浮在固体和足够质量的液体之上。";
+            }
         }
 
         public class CONFIGURATIONITEM
@@ -87,7 +93,10 @@
             {
                 public static LocString CONVERSION_COEFFICIENT = "机械锹环田鼠转化系数";
             }
-
+            public class RobotSlickster_UI
+            {
+                public static LocString CONVERSION_COEFFICIENT = "机械浮游生物转化系数";
+            }
         }
             
         

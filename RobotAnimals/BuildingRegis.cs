@@ -41,16 +41,7 @@ namespace sinevil.Robot_Animal_Remastered.utils
 
         public static void Prefix()
         {
-            AddToBuild.Add("RobotStaterpillar", 
-                RobotAnimalSTRINGS.BUILDINGS.RobotStaterpillar.NAME, 
-                RobotAnimalSTRINGS.BUILDINGS.RobotStaterpillar.DESC,
-                RobotAnimalSTRINGS.BUILDINGS.RobotStaterpillar.EFFECT
-                );
-            AddToBuild.Add("RobotStego",
-                RobotAnimalSTRINGS.BUILDINGS.RobotStego.NAME,
-                RobotAnimalSTRINGS.BUILDINGS.RobotStego.DESC,
-                RobotAnimalSTRINGS.BUILDINGS.RobotStego.EFFECT
-                );
+
             AddToBuild.Add("RobotHatch",
                 RobotAnimalSTRINGS.BUILDINGS.RobotHatch.NAME,
                 RobotAnimalSTRINGS.BUILDINGS.RobotHatch.DESC,
@@ -76,6 +67,21 @@ namespace sinevil.Robot_Animal_Remastered.utils
                 RobotAnimalSTRINGS.BUILDINGS.RobotShoveVole.DESC,
                 RobotAnimalSTRINGS.BUILDINGS.RobotShoveVole.EFFECT
             );
+            AddToBuild.Add("RobotSlickster",
+                RobotAnimalSTRINGS.BUILDINGS.RobotSlickster.NAME,
+                RobotAnimalSTRINGS.BUILDINGS.RobotSlickster.DESC,
+                RobotAnimalSTRINGS.BUILDINGS.RobotSlickster.EFFECT
+            );
+            AddToBuild.Add("RobotStaterpillar",
+                RobotAnimalSTRINGS.BUILDINGS.RobotStaterpillar.NAME,
+                RobotAnimalSTRINGS.BUILDINGS.RobotStaterpillar.DESC,
+                RobotAnimalSTRINGS.BUILDINGS.RobotStaterpillar.EFFECT
+                );
+            AddToBuild.Add("RobotStego",
+                RobotAnimalSTRINGS.BUILDINGS.RobotStego.NAME,
+                RobotAnimalSTRINGS.BUILDINGS.RobotStego.DESC,
+                RobotAnimalSTRINGS.BUILDINGS.RobotStego.EFFECT
+                );
         }
     }
 
@@ -86,13 +92,14 @@ namespace sinevil.Robot_Animal_Remastered.utils
         {
             // 添加到科技树
             List<string> unlockedItemIDs = Db.Get().Techs.Get("Smelting").unlockedItemIDs;
-            unlockedItemIDs.Add("RobotStaterpillar");
-            unlockedItemIDs.Add("RobotStego");
             unlockedItemIDs.Add("RobotHatch");
             unlockedItemIDs.Add("RobotPacu");
             unlockedItemIDs.Add("RobotPokeshell");
             unlockedItemIDs.Add("RobotPuft");
             unlockedItemIDs.Add("RobotShoveVole");
+            unlockedItemIDs.Add("RobotSlickster");
+            unlockedItemIDs.Add("RobotStaterpillar");
+            unlockedItemIDs.Add("RobotStego");
         }
     }
 

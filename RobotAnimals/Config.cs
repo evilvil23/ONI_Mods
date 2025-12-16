@@ -20,7 +20,7 @@ namespace sinevil.Robot_Animal_Remastered
         /// 哈奇岩石配方转换系数
         /// </summary>
         [Option(ConfigStrings.Hatch_Rock_ConversionCoefficient, "", ConfigStrings.category, Format = "F1")]
-        [Limit(0, 1)]
+        [Limit(0.1f, 1)]
         [JsonProperty]
         public float robotHatch_Rock_Conversion_Coefficient { get; set; } = 0.5f;
 
@@ -28,7 +28,7 @@ namespace sinevil.Robot_Animal_Remastered
         /// 哈奇食物配方转换系数
         /// </summary>
         [Option(ConfigStrings.Hatch_Food_ConversionCoefficient, "", ConfigStrings.category, Format = "F2")]
-        [Limit(0, 1)]
+        [Limit(0.1f, 1)]
         [JsonProperty]
         public float robotHatch_Food_Conversion_Coefficient { get; set; } = 0.75f;
 
@@ -36,7 +36,7 @@ namespace sinevil.Robot_Animal_Remastered
         /// 帕库鱼配方转换系数
         /// </summary>
         [Option(ConfigStrings.PacuConversionCoefficient, "", ConfigStrings.category, Format = "F1")]
-        [Limit(0, 10)]
+        [Limit(0.1f, 10)]
         [JsonProperty]
         public float robotPacu_Conversion_Coefficient { get; set; } = 1f;
 
@@ -44,7 +44,7 @@ namespace sinevil.Robot_Animal_Remastered
         /// 抛壳蟹配方转换系数
         /// </summary>
         [Option(ConfigStrings.PokeshellConversionCoefficient, "", ConfigStrings.category, Format = "F1")]
-        [Limit(0, 10)]
+        [Limit(0.1f, 10)]
         [JsonProperty]
         public float robotPokeshell_Conversion_Coefficient { get; set; } = 1f;
 
@@ -52,7 +52,7 @@ namespace sinevil.Robot_Animal_Remastered
         /// 喷浮飞鱼配方转换系数
         /// </summary>
         [Option(ConfigStrings.PuftConversionCoefficient, "", ConfigStrings.category, Format = "F2")]
-        [Limit(0, 1)]
+        [Limit(0.1f, 1)]
         [JsonProperty]
         public float robotPuft_Conversion_Coefficient { get; set; } = 0.95f;
 
@@ -60,9 +60,17 @@ namespace sinevil.Robot_Animal_Remastered
         /// 锹环田鼠配方转换系数
         /// </summary>
         [Option(ConfigStrings.ShoveVoleConversionCoefficient, "", ConfigStrings.category, Format = "F1")]
-        [Limit(0, 10)]
+        [Limit(0.1f, 10)]
         [JsonProperty]
         public float robotShoveVole_Conversion_Coefficient { get; set; } = 1f;
+
+        /// <summary>
+        /// 浮游生物配方转换系数
+        /// </summary>
+        [Option(ConfigStrings.SlicksterConversionCoefficient, "", ConfigStrings.category, Format = "F1")]
+        [Limit(0.1f, 1)]
+        [JsonProperty]
+        public float robotSlickster_Conversion_Coefficient { get; set; } = 0.5f;
 
         /// <summary>
         /// 蛞蝓配方转换系数
@@ -94,6 +102,7 @@ namespace sinevil.Robot_Animal_Remastered
         public const string PokeshellConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotPokeshell_UI.CONVERSION_COEFFICIENT";
         public const string PuftConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotPuft_UI.CONVERSION_COEFFICIENT";
         public const string ShoveVoleConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotShoveVole_UI.CONVERSION_COEFFICIENT";
+        public const string SlicksterConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotSlickster_UI.CONVERSION_COEFFICIENT";
 
         public const string StaterpillarConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotStaterpillar_UI.CONVERSION_COEFFICIENT";
         public const string StegoConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotStego_UI.CONVERSION_COEFFICIENT";
