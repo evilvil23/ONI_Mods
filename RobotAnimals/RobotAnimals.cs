@@ -813,7 +813,7 @@ namespace sinevil.Robot_Animal_Remastered
         // 建筑唯一ID
         private const string ID = "RobotPuft";
         // 基础建筑属性常量
-        private const int BUILD_WIDTH = 2;
+        private const int BUILD_WIDTH = 1;
         private const int BUILD_HEIGHT = 1;
         // 建筑动画名称
         private const string ANIM = "RobotPuft_kanim";
@@ -1150,6 +1150,7 @@ namespace sinevil.Robot_Animal_Remastered
             go.AddOrGet<LoopingSounds>();
             go.AddOrGetDef<ActiveController.Def>();
             go.AddOrGet<KBatchedAnimController>().randomiseLoopedOffset = true;
+            CykUtils.LogUtil.Log("机械浮游生物已加载");
         }
 
         

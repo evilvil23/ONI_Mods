@@ -30,7 +30,7 @@
             public class RobotPacu
             {
                 public static LocString NAME = "机械帕库鱼";
-                public static LocString EFFECT = "哈奇进食后产出污染土，凭借快速的繁殖速度，是殖民地蛋白质的主要来源之一。";
+                public static LocString EFFECT = "帕库鱼进食后产出污染土，凭借快速的繁殖速度，是殖民地蛋白质的主要来源之一。";
                 public static LocString DESC = "帕库鱼是一种优质的蛋白质来源，自然生成于湿地生态的污染水水域中，既可吃死亡后掉落的帕库鱼片，也可吃蛋。";
             }
 
