@@ -3,6 +3,7 @@ using PeterHan.PLib.Options;
 using STRINGS;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TUNING;
 using UnityEngine;
 using static STRINGS.DUPLICANTS.TRAITS;
@@ -376,6 +377,14 @@ namespace sinevil.Robot_Animal_Remastered
             this.AddConfigureRecipe("Granite", ELEMENTS.GRANITE.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 花岗岩
             this.AddConfigureRecipe("Shale", ELEMENTS.SHALE.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 页岩
 
+            this.AddConfigureRecipe(
+                new List<Tag> { SimHashes.Salt.CreateTag() },
+                new List<StringKey> { new StringKey("STRINGS.ELEMENTS.SOLIDBORAX.NAME") },
+                new List<float> { 14f },
+                new List<Tag> { "SolidBorax" },
+                new List<StringKey> { new StringKey("STRINGS.ELEMENTS.SALT.NAME") },
+                new List<float> { 3.5f },
+                recipeTime);
 
             string carbonName = ELEMENTS.CARBON.NAME;
 
@@ -385,6 +394,55 @@ namespace sinevil.Robot_Animal_Remastered
             CykUtils.LogUtil.Log($"机械哈奇已获取{foodDiet.Count} 个食物食谱");
             GenerateRecipesFromDietInfo(foodDiet, CONVERSION_EFFICIENCY_FOOD);
 
+        }
+
+        /// <summary>
+        /// 最通用的配方添加方法
+        /// 为机械机械小动物添加配方
+        /// </summary>
+        /// <param name="inTags">输入物标签列表</param>
+        /// <param name="inNames">输入物名称列表</param>
+        /// <param name="consumedAmounts">输入物消耗量列表</param>
+        /// <param name="outTags">输出物标签列表</param>
+        /// <param name="outNames">输出物名称列表</param>
+        /// <param name="outputAmounts">输出物产量列表</param>
+        /// <param name="recipeTime">配方时间</param>
+        private void AddConfigureRecipe(List<Tag> inTags, List<StringKey> inNames, List<float> consumedAmounts, List<Tag> outTags, List<StringKey> outNames, List<float> outputAmounts, float recipeTime)
+        {
+            // 步骤1：创建临时列表存储批量生成的RecipeElement
+            List<ComplexRecipe.RecipeElement> array = new List<ComplexRecipe.RecipeElement>();
+            List<ComplexRecipe.RecipeElement> array2 = new List<ComplexRecipe.RecipeElement>();
+            // 步骤2：遍历inTags和consumedAmounts，批量添加元素
+            for (int i = 0; i < inTags.Count; i++)
+                array.Add(new ComplexRecipe.RecipeElement(inTags[i], consumedAmounts[i]));
+
+            // 步骤3：遍历outTags和outputAmounts，批量添加元素
+            for (int i = 0; i < outTags.Count; i++)
+                array2.Add(new ComplexRecipe.RecipeElement(outTags[i], outputAmounts[i]));
+
+            ComplexRecipe complexRecipe = new ComplexRecipe(ComplexRecipeManager.MakeRecipeID(ID, array, array2), array.ToArray(), array2.ToArray());
+            complexRecipe.time = recipeTime;
+
+            // 拼接输入物字符串 和 输出物字符串
+            StringEntry ot;
+            string inString = string.Join(", ", inNames.Select(entry =>
+            {
+                Strings.TryGet(entry, out ot);
+                return ot;
+            }));
+            string outString = string.Join(", ", outNames.Select(entry =>
+            {
+                Strings.TryGet(entry, out ot);
+                return ot;
+            }));
+
+            complexRecipe.description = string.Format(STRINGS.BUILDINGS.PREFABS.CRAFTINGTABLE.RECIPE_DESCRIPTION, inString, outString);
+            complexRecipe.nameDisplay = ComplexRecipe.RecipeNameDisplay.IngredientToResult;
+            complexRecipe.fabricators = new List<Tag>
+            {
+                TagManager.Create(ID)
+            };
+            CykUtils.LogUtil.Log($"机械哈奇 添加配方 {complexRecipe.description}");
         }
 
         /// <summary>
@@ -747,6 +805,12 @@ namespace sinevil.Robot_Animal_Remastered
             AddConfigureRecipe(inTags, consumedAmounts,
                 new List<Tag> { "ShellfishMeat", SimHashes.Sand.CreateTag() },
                 new List<float> { 0.4f * CONVERSION_EFFICIENCY, 0.02f * CONVERSION_EFFICIENCY },
+                recipeTime);
+
+            // 工业革命配方： 炉渣 --> 硝酸盐结晶
+            AddConfigureRecipe(new List<Tag>() { "SolidSlag" }, consumedAmounts,
+                new List<Tag> { "AmmoniumSalt" },
+                new List<float> { 5.25f * CONVERSION_EFFICIENCY },
                 recipeTime);
 
         }

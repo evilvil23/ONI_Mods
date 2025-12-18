@@ -40,6 +40,11 @@ namespace sinevil.Robot_Animal_Remastered
             {
                 return name;
             }
+
+            if (tag.ToString().EndsWith("Config") && Strings.TryGet(new StringKey($"STRINGS.ELEMENTS.{RemoveConfigSuffix(tag.ToString()).ToUpper()}.NAME"), out name))
+            {
+                return name;
+            }
             // 兜底返回标签名
             return tag.ToString();
         }
