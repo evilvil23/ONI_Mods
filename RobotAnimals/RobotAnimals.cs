@@ -84,6 +84,7 @@ namespace sinevil.Robot_Animal_Remastered
         {
             go.AddOrGet<DropAllWorkable>();
             go.AddOrGet<BuildingComplete>().isManuallyOperated = false;
+            go.AddOrGet<CopyBuildingSettings>();
             ComplexFabricator complexFabricator = go.AddOrGet<ComplexFabricator>();
             complexFabricator.heatedTemperature = 353.15f;
             complexFabricator.duplicantOperated = false;
@@ -242,6 +243,7 @@ namespace sinevil.Robot_Animal_Remastered
         {
             go.AddOrGet<DropAllWorkable>();
             go.AddOrGet<BuildingComplete>().isManuallyOperated = false;
+            go.AddOrGet<CopyBuildingSettings>();
             ComplexFabricator complexFabricator = go.AddOrGet<ComplexFabricator>();
             complexFabricator.heatedTemperature = 353.15f;
             complexFabricator.duplicantOperated = false;
@@ -358,6 +360,7 @@ namespace sinevil.Robot_Animal_Remastered
         {
             go.AddOrGet<DropAllWorkable>();
             go.AddOrGet<BuildingComplete>().isManuallyOperated = false;
+            go.AddOrGet<CopyBuildingSettings>();
             ComplexFabricator complexFabricator = go.AddOrGet<ComplexFabricator>();
             complexFabricator.heatedTemperature = 353.15f;
             complexFabricator.duplicantOperated = false;
@@ -442,7 +445,6 @@ namespace sinevil.Robot_Animal_Remastered
             {
                 TagManager.Create(ID)
             };
-            CykUtils.LogUtil.Log($"机械哈奇 添加配方 {complexRecipe.description}");
         }
 
         /// <summary>
@@ -581,6 +583,7 @@ namespace sinevil.Robot_Animal_Remastered
         {
             go.AddOrGet<DropAllWorkable>();
             go.AddOrGet<BuildingComplete>().isManuallyOperated = false;
+            go.AddOrGet<CopyBuildingSettings>();
             ComplexFabricator complexFabricator = go.AddOrGet<ComplexFabricator>();
             complexFabricator.heatedTemperature = 353.15f;
             complexFabricator.duplicantOperated = false;
@@ -789,6 +792,7 @@ namespace sinevil.Robot_Animal_Remastered
         {
             go.AddOrGet<DropAllWorkable>();
             go.AddOrGet<BuildingComplete>().isManuallyOperated = false;
+            go.AddOrGet<CopyBuildingSettings>();
             ComplexFabricator complexFabricator = go.AddOrGet<ComplexFabricator>();
             complexFabricator.heatedTemperature = 353.15f;
             complexFabricator.duplicantOperated = false;
@@ -1032,6 +1036,7 @@ namespace sinevil.Robot_Animal_Remastered
         {
             go.AddOrGet<DropAllWorkable>();
             go.AddOrGet<BuildingComplete>().isManuallyOperated = false;
+            go.AddOrGet<CopyBuildingSettings>();
             ComplexFabricator complexFabricator = go.AddOrGet<ComplexFabricator>();
             complexFabricator.heatedTemperature = 353.15f;
             complexFabricator.duplicantOperated = false;
