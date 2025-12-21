@@ -15,6 +15,13 @@ namespace sinevil.Robot_Animal_Remastered
     [RestartRequired]
     public class ConfigurationItem : SingletonOptions<ConfigurationItem>
     {
+        /// <summary>
+        /// 能耗与效率倍率
+        /// </summary>
+        [Option(ConfigStrings.PowerMulti, ConfigStrings.PowerMultiTip, ConfigStrings.category, Format = "F0")]
+        [Limit(1, 10)]
+        [JsonProperty]
+        public float powerMulti { get; set; } = 1f;
 
         /// <summary>
         /// 哈奇岩石配方转换系数
@@ -83,7 +90,7 @@ namespace sinevil.Robot_Animal_Remastered
         /// <summary>
         /// 尖块兽配方转换系数
         /// </summary>
-        [Option(ConfigStrings.StaterpillarConversionCoefficient, "", ConfigStrings.category, Format = "F0")]
+        [Option(ConfigStrings.StegoConversionCoefficient, "", ConfigStrings.category, Format = "F0")]
         [Limit(1, 10)]
         [JsonProperty]
         public float robotStego_Conversion_Coefficient { get; set; } = 1f;
@@ -94,6 +101,9 @@ namespace sinevil.Robot_Animal_Remastered
     {
         // 分类
         public const string category = "RobotAnimalSTRINGS.CONFIGURATIONITEM.CATEGORY";
+
+        public const string PowerMulti = "RobotAnimalSTRINGS.CONFIGURATIONITEM.POWERMULTI";
+        public const string PowerMultiTip = "RobotAnimalSTRINGS.CONFIGURATIONITEM.POWERMULTI_TIP";
 
         public const string Hatch_Rock_ConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotHatch_UI.ROCK_CONVERSION_COEFFICIENT";
         public const string Hatch_Food_ConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotHatch_UI.FOOD_CONVERSION_COEFFICIENT";

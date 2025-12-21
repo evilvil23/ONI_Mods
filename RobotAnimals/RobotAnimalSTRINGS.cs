@@ -63,6 +63,8 @@
         public class CONFIGURATIONITEM
         {
             public static LocString CATEGORY = "建筑配置";
+            public static LocString POWERMULTI = "机械小动物能耗与产量倍率";
+            public static LocString POWERMULTI_TIP = "影响除机械浮游生物和机械飞鱼外其他机械小动物的能耗和转化速度";
 
             public class RobotStaterpillar_UI
             {

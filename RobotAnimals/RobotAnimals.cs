@@ -14,6 +14,7 @@ namespace sinevil.Robot_Animal_Remastered
     public static class Configration
     {
         internal static readonly ConfigurationItem config = SingletonOptions<ConfigurationItem>.Instance;
+        public static float PowerMulti = config.powerMulti;
     }
     /**
      * 机械蛞蝓
@@ -34,11 +35,13 @@ namespace sinevil.Robot_Animal_Remastered
         // 熔点 75摄氏度
         private const float MELTING_POINT = 167;
 
+        private const float recipeTime = 60f;
+
         // 配置存储规则（隐藏+保鲜）
         List<Storage.StoredItemModifier> gasOutputModifiers = new List<Storage.StoredItemModifier>
         {
-        Storage.StoredItemModifier.Hide,
-        Storage.StoredItemModifier.Preserve
+            Storage.StoredItemModifier.Hide,
+            Storage.StoredItemModifier.Preserve
         };
 
         public override BuildingDef CreateBuildingDef()
@@ -68,7 +71,7 @@ namespace sinevil.Robot_Animal_Remastered
             buildingDef.Overheatable = false;
             buildingDef.RequiresPowerInput = true;
             buildingDef.PowerInputOffset = new CellOffset(0, 0);
-            buildingDef.EnergyConsumptionWhenActive = 60f;
+            buildingDef.EnergyConsumptionWhenActive = 60f*Configration.PowerMulti;
             buildingDef.ExhaustKilowattsWhenActive = 0.5f;
             buildingDef.SelfHeatKilowattsWhenActive = 1f;
             // 气体输出端口
@@ -133,13 +136,22 @@ namespace sinevil.Robot_Animal_Remastered
                     // 日志明确标注矿石+目标产物，便于调试
                     Debug.Log("机械蛞蝓添加配方: 矿石[" + element.tag + "] --> Hydrogen", go);
                     // 调用配方添加方法（保留原参数，仅限定原材料为矿石）
-                    this.addConfigureRecipes(element.tag, element.name, 60f, conversionCoefficient*60);
+                    this.addConfigureRecipes(element.tag, element.name, 60f * Configration.PowerMulti, conversionCoefficient*60 * Configration.PowerMulti);
                 }
                 else
                 {
                     // 日志提示无效相变的矿石，便于排查
                     Debug.LogWarning("机械蛞蝓配方跳过: 矿石[" + element.tag + "] 无相变目标", go);
                 }
+            }
+            // 筛选：精炼金属
+            foreach (Element element in ElementLoader.elements.FindAll((Element e) =>
+                e.IsSolid &&
+                e.HasTag(GameTags.RefinedMetal) &&
+                !e.disabled
+            ))
+            {
+                this.addConfigureRecipes(element.tag, element.name, 60f * Configration.PowerMulti, conversionCoefficient * 60 * Configration.PowerMulti);
             }
 
 
@@ -167,7 +179,7 @@ namespace sinevil.Robot_Animal_Remastered
             };
             ComplexRecipe complexRecipe = new ComplexRecipe(ComplexRecipeManager.MakeRecipeID("RobotHatch", array, array2), array, array2);
             // 配方消耗时间 60秒
-            complexRecipe.time = 60f;
+            complexRecipe.time = recipeTime;
             complexRecipe.description = string.Format(STRINGS.BUILDINGS.PREFABS.CRAFTINGTABLE.RECIPE_DESCRIPTION, name, ELEMENTS.HYDROGEN.NAME);
             complexRecipe.nameDisplay = ComplexRecipe.RecipeNameDisplay.IngredientToResult;
             complexRecipe.fabricators = new List<Tag>
@@ -230,7 +242,7 @@ namespace sinevil.Robot_Animal_Remastered
             buildingDef.Overheatable = false;
             buildingDef.RequiresPowerInput = true;
             buildingDef.PowerInputOffset = new CellOffset(0, 0);
-            buildingDef.EnergyConsumptionWhenActive = 60f;
+            buildingDef.EnergyConsumptionWhenActive = 60f * Configration.PowerMulti;
             buildingDef.ExhaustKilowattsWhenActive = 0.5f;
             buildingDef.SelfHeatKilowattsWhenActive = 1f;
 
@@ -255,9 +267,9 @@ namespace sinevil.Robot_Animal_Remastered
             float conversionCoefficient = Configration.config.robotStego_Conversion_Coefficient;
             // ========== 添加配方 ==========
             // 当系数为1时，每0.4kg漫花果产出20kg泥炭和0.5kg硬肉
-            this.addConfigureRecipes("VineFruit", STRINGS.ITEMS.FOOD.VINEFRUIT.NAME, 0.4f, conversionCoefficient*20, conversionCoefficient*0.5f);
-            this.addConfigureRecipes("PrickleFruit", STRINGS.ITEMS.FOOD.PRICKLEFRUIT.NAME, 0.08125f, conversionCoefficient*20, conversionCoefficient*0.5f);
-            this.addConfigureRecipes("SwampFruit", STRINGS.ITEMS.FOOD.SWAMPFRUIT.NAME, 0.07065f, conversionCoefficient*30, conversionCoefficient*0.5f);
+            this.addConfigureRecipes("VineFruit", STRINGS.ITEMS.FOOD.VINEFRUIT.NAME, 0.4f * Configration.PowerMulti, 20 * conversionCoefficient * Configration.PowerMulti, 0.5f * conversionCoefficient * Configration.PowerMulti);
+            this.addConfigureRecipes("PrickleFruit", STRINGS.ITEMS.FOOD.PRICKLEFRUIT.NAME, 0.08125f * Configration.PowerMulti, 20* conversionCoefficient * Configration.PowerMulti, 0.5f * conversionCoefficient * Configration.PowerMulti);
+            this.addConfigureRecipes("SwampFruit", STRINGS.ITEMS.FOOD.SWAMPFRUIT.NAME, 0.07065f * Configration.PowerMulti, 30 * conversionCoefficient * Configration.PowerMulti, 0.5f * conversionCoefficient * Configration.PowerMulti);
 
         }
 
@@ -314,7 +326,7 @@ namespace sinevil.Robot_Animal_Remastered
 
         // 复用哈奇的饮食常量（与原版逻辑对齐）
         private Tag EMIT_ELEMENT = SimHashes.Carbon.CreateTag();
-        private static float KG_ROCK_EATEN_PER_CYCLE = 14f; // 每60s吃掉的矿石质量
+        private static float KG_ROCK_EATEN_PER_CYCLE = 14f * Configration.PowerMulti; // 每60s吃掉的矿石质量
         private float CONVERSION_EFFICIENCY_ROCK = Configration.config.robotHatch_Rock_Conversion_Coefficient; // 岩石转换效率
         private float CONVERSION_EFFICIENCY_FOOD = Configration.config.robotHatch_Food_Conversion_Coefficient; // 食物转化效率
 
@@ -347,7 +359,7 @@ namespace sinevil.Robot_Animal_Remastered
             buildingDef.Overheatable = false;
             buildingDef.RequiresPowerInput = true;
             buildingDef.PowerInputOffset = new CellOffset(0, 0);
-            buildingDef.EnergyConsumptionWhenActive = 30f;
+            buildingDef.EnergyConsumptionWhenActive = 30f * Configration.PowerMulti;
             buildingDef.ExhaustKilowattsWhenActive = 0.5f;
             buildingDef.SelfHeatKilowattsWhenActive = 1f;
 
@@ -487,8 +499,8 @@ namespace sinevil.Robot_Animal_Remastered
                     // 计算消耗/产出量（复用哈奇的每周期消耗量逻辑）
                     float consumedAmount = KG_ROCK_EATEN_PER_CYCLE;
                     // 食物类物品按卡路里调整消耗量（避免数值过大）
-                    consumedAmount = GetFoodAdjustedConsumption(inputTag);
-                    float outputAmount = consumedAmount * conversionEfficiency;
+                    consumedAmount = GetFoodAdjustedConsumption(inputTag) * Configration.PowerMulti;
+                    float outputAmount = consumedAmount * conversionEfficiency * Configration.PowerMulti;
 
                     // 生成单个配方
                     AddConfigureRecipe(inputTag, inputName, consumedAmount, outputAmount);
@@ -570,7 +582,7 @@ namespace sinevil.Robot_Animal_Remastered
             buildingDef.Overheatable = false;
             buildingDef.RequiresPowerInput = true;
             buildingDef.PowerInputOffset = new CellOffset(0, 0);
-            buildingDef.EnergyConsumptionWhenActive = 30f;
+            buildingDef.EnergyConsumptionWhenActive = 30f * Configration.PowerMulti;
             buildingDef.ExhaustKilowattsWhenActive = 0.5f;
             buildingDef.SelfHeatKilowattsWhenActive = 0.5f;
 
@@ -592,13 +604,9 @@ namespace sinevil.Robot_Animal_Remastered
             BuildingTemplates.CreateComplexFabricatorStorage(go, complexFabricator);
 
             // 1. 藻类和海梳蕨叶配方
-            AddConfigureRecipe(SimHashes.Algae.CreateTag(), 0.75f, 0.38f * CONVERSION_EFFICIENCY);
-            AddConfigureRecipe(KelpConfig.ID, 2f, 1f * CONVERSION_EFFICIENCY);
+            AddConfigureRecipe(SimHashes.Algae.CreateTag(), 0.75f * Configration.PowerMulti, 0.38f * CONVERSION_EFFICIENCY * Configration.PowerMulti);
+            AddConfigureRecipe(KelpConfig.ID, 2f * Configration.PowerMulti, 1f * CONVERSION_EFFICIENCY * Configration.PowerMulti);
 
-
-            // 2. 种子饮食配方（对应BasePacuConfig.SeedDiet）
-            //List<Diet.Info> seedDiet = BasePacuConfig.SeedDiet(SimHashes.ToxicSand.CreateTag(), PacuTuning.STANDARD_CALORIES_PER_CYCLE, TUNING.CREATURES.CONVERSION_EFFICIENCY.NORMAL);
-            //CykUtils.LogUtil.Log($"机械帕库鱼已获取{seedDiet.Count} 个种子食谱");
 
 
             List<Tag> seedTags = new List<Tag>();
@@ -706,14 +714,14 @@ namespace sinevil.Robot_Animal_Remastered
             // 产物列表
             List<Tag> productList = new List<Tag> { SimHashes.ToxicSand.CreateTag(), TagExtensions.ToTag("FishMeat"), TagExtensions.ToTag("PacuEgg") };
             // 产物数量
-            List<float> outputAmountsList = new List<float> { 0.5f * conversionEfficiency, 0.025f * conversionEfficiency, 1f * conversionEfficiency };
+            List<float> outputAmountsList = new List<float> { 0.5f * conversionEfficiency * Configration.PowerMulti, 0.025f * conversionEfficiency * Configration.PowerMulti, 1f * conversionEfficiency * Configration.PowerMulti };
 
             CykUtils.LogUtil.Log("为机械帕库鱼添加" + seedTags.Count + "个种子配方 ");
             foreach (Tag inputTag in seedTags)
             {
                 AddConfigureRecipe(
                     new List<Tag> { inputTag },
-                    new List<float> { 10 },
+                    new List<float> { 10 * Configration.PowerMulti },
                     productList,
                     outputAmountsList,
                     120f
@@ -780,7 +788,7 @@ namespace sinevil.Robot_Animal_Remastered
             buildingDef.Overheatable = false;
             buildingDef.RequiresPowerInput = true;
             buildingDef.PowerInputOffset = new CellOffset(0, 0);
-            buildingDef.EnergyConsumptionWhenActive = 30f;
+            buildingDef.EnergyConsumptionWhenActive = 30f * Configration.PowerMulti;
             buildingDef.ExhaustKilowattsWhenActive = 0.5f;
             buildingDef.SelfHeatKilowattsWhenActive = 0.5f;
 
@@ -801,20 +809,20 @@ namespace sinevil.Robot_Animal_Remastered
             BuildingTemplates.CreateComplexFabricatorStorage(go, complexFabricator);
 
             List<Tag> inTags = new List<Tag>() { SimHashes.ToxicSand.CreateTag() };
-            List<float> consumedAmounts = new List<float>() { 7f };
+            List<float> consumedAmounts = new List<float>() { 7f * Configration.PowerMulti };
             AddConfigureRecipe(inTags, consumedAmounts, 
                 new List<Tag> { "CrabShell", SimHashes.Sand.CreateTag()}, 
-                new List<float> { 1f * CONVERSION_EFFICIENCY, 0.02f * CONVERSION_EFFICIENCY },
+                new List<float> { 1f * CONVERSION_EFFICIENCY * Configration.PowerMulti, 0.02f * CONVERSION_EFFICIENCY * Configration.PowerMulti },
                 recipeTime);
             AddConfigureRecipe(inTags, consumedAmounts,
                 new List<Tag> { "ShellfishMeat", SimHashes.Sand.CreateTag() },
-                new List<float> { 0.4f * CONVERSION_EFFICIENCY, 0.02f * CONVERSION_EFFICIENCY },
+                new List<float> { 0.4f * CONVERSION_EFFICIENCY * Configration.PowerMulti, 0.02f * CONVERSION_EFFICIENCY * Configration.PowerMulti },
                 recipeTime);
 
             // 工业革命配方： 炉渣 --> 硝酸盐结晶
             AddConfigureRecipe(new List<Tag>() { "SolidSlag" }, consumedAmounts,
                 new List<Tag> { "AmmoniumSalt" },
-                new List<float> { 5.25f * CONVERSION_EFFICIENCY },
+                new List<float> { 5.25f * CONVERSION_EFFICIENCY * Configration.PowerMulti },
                 recipeTime);
 
         }
@@ -1024,7 +1032,7 @@ namespace sinevil.Robot_Animal_Remastered
             buildingDef.Overheatable = false;
             buildingDef.RequiresPowerInput = true;
             buildingDef.PowerInputOffset = new CellOffset(0, 0);
-            buildingDef.EnergyConsumptionWhenActive = 30f;
+            buildingDef.EnergyConsumptionWhenActive = 30f * Configration.PowerMulti;
             buildingDef.ExhaustKilowattsWhenActive = 0.5f;
             buildingDef.SelfHeatKilowattsWhenActive = 0.5f;
 
@@ -1045,9 +1053,9 @@ namespace sinevil.Robot_Animal_Remastered
             BuildingTemplates.CreateComplexFabricatorStorage(go, complexFabricator);
 
 
-            List<float> consumedAmounts = new List<float>() { 480f };
+            List<float> consumedAmounts = new List<float>() { 480f * Configration.PowerMulti };
             List<Tag> outTags = new List<Tag> { MeatConfig.ID, GingerConfig.ID };
-            List<float> outputAmounts = new List<float> { 20f * CONVERSION_EFFICIENCY, 16f * CONVERSION_EFFICIENCY };
+            List<float> outputAmounts = new List<float> { 20f * CONVERSION_EFFICIENCY * Configration.PowerMulti, 16f * CONVERSION_EFFICIENCY * Configration.PowerMulti };
             // 浮土
             AddConfigureRecipe(
                 new List<Tag> { SimHashes.Regolith.CreateTag()},
