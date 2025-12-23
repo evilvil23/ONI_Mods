@@ -58,6 +58,12 @@
                 public static LocString EFFECT = "浮油生物能将二氧化碳转化为原油。";
                 public static LocString DESC = "浮油生物是一种悬浮生物，常见于油质生态。浮油生物能够悬浮在固体和足够质量的液体之上。";
             }
+            public class RobotWorm
+            {
+                public static LocString NAME = "机械果虫";
+                public static LocString EFFECT = "异化虫是利用硫的重要工具。";
+                public static LocString DESC = "甲虫是蔗糖的可再生来源，果虫则是泥巴的可再生来源。";
+            }
         }
 
         public class CONFIGURATIONITEM
@@ -98,6 +104,10 @@
             public class RobotSlickster_UI
             {
                 public static LocString CONVERSION_COEFFICIENT = "机械浮游生物转化系数";
+            }
+            public class RobotWorm_UI
+            {
+                public static LocString CONVERSION_COEFFICIENT = "机械果虫转化系数";
             }
         }
             

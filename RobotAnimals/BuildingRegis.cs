@@ -82,6 +82,11 @@ namespace sinevil.Robot_Animal_Remastered.utils
                 RobotAnimalSTRINGS.BUILDINGS.RobotStego.DESC,
                 RobotAnimalSTRINGS.BUILDINGS.RobotStego.EFFECT
                 );
+            AddToBuild.Add("RobotWorm",
+            RobotAnimalSTRINGS.BUILDINGS.RobotWorm.NAME,
+            RobotAnimalSTRINGS.BUILDINGS.RobotWorm.DESC,
+            RobotAnimalSTRINGS.BUILDINGS.RobotWorm.EFFECT
+            );
         }
     }
 
@@ -100,6 +105,7 @@ namespace sinevil.Robot_Animal_Remastered.utils
             unlockedItemIDs.Add("RobotSlickster");
             unlockedItemIDs.Add("RobotStaterpillar");
             unlockedItemIDs.Add("RobotStego");
+            unlockedItemIDs.Add("RobotWorm");
         }
     }
 

@@ -3,10 +3,8 @@ using PeterHan.PLib.Options;
 using STRINGS;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TUNING;
 using UnityEngine;
-using static STRINGS.DUPLICANTS.TRAITS;
 using BUILDINGS = TUNING.BUILDINGS;
 
 namespace sinevil.Robot_Animal_Remastered
@@ -391,6 +389,7 @@ namespace sinevil.Robot_Animal_Remastered
             this.AddConfigureRecipe("Obsidian", ELEMENTS.OBSIDIAN.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 黑曜石
             this.AddConfigureRecipe("Granite", ELEMENTS.GRANITE.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 花岗岩
             this.AddConfigureRecipe("Shale", ELEMENTS.SHALE.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_CARBON_OUT_FOR_ORE); // 页岩
+            this.AddConfigureRecipe(SimHashes.Fertilizer.CreateTag(), ELEMENTS.FERTILIZER.NAME, KG_ROCK_EATEN_PER_CYCLE, KG_ROCK_EATEN_PER_CYCLE); // 页岩
 
             this.AddConfigureRecipe(
                 new List<Tag> { SimHashes.Salt.CreateTag() },
@@ -632,6 +631,7 @@ namespace sinevil.Robot_Animal_Remastered
                 seedTags.Add("WormPlantSeed"); // 虫果种子
                 seedTags.Add("SpaceTreeSeed"); // 糖心树种子
                 seedTags.Add("PrickleFlowerSeed"); // 毛刺花种子
+
 
                 seedTags.Add("SnowSculptures_PineCone"); // mod 圣诞树_松果
 
@@ -1231,5 +1231,152 @@ namespace sinevil.Robot_Animal_Remastered
         }
 
         
+    }
+
+    /**
+     * 机械果虫
+     */
+    public class RobotWormConfig : IBuildingConfig
+    {
+        // 建筑唯一ID
+        private const string ID = "RobotWorm";
+        // 基础建筑属性常量
+        private const int BUILD_WIDTH = 2;
+        private const int BUILD_HEIGHT = 1;
+        // 建筑动画名称
+        private const string ANIM = "RobotWorm_kanim";
+        // 建筑生命值
+        private const int HIT_POINTS = 100;
+        // 施工时间
+        private const float CONSTRUCTION_TIME = 10f;
+        // 熔点 75摄氏度
+        private const float MELTING_POINT = 167;
+
+        private float recipeTime = 60f;
+
+        private float CONVERSION_EFFICIENCY = Configration.config.robotWorm_Conversion_Coefficient; // 配方转化效率
+
+        public override BuildingDef CreateBuildingDef()
+        {
+            BuildLocationRule build_location_rule = BuildLocationRule.OnFloor;
+            string[] constructionMaterials = { "METAL" };
+            float[] constructionMass = { BUILDINGS.CONSTRUCTION_MASS_KG.TIER1[0] };
+
+            // 创建建筑定义
+            BuildingDef buildingDef = BuildingTemplates.CreateBuildingDef(
+                id: ID,
+                width: BUILD_WIDTH,
+                height: BUILD_HEIGHT,
+                anim: ANIM,
+                hitpoints: HIT_POINTS,
+                construction_time: CONSTRUCTION_TIME,
+                construction_mass: constructionMass,
+                construction_materials: constructionMaterials,
+                melting_point: MELTING_POINT,
+                build_location_rule: build_location_rule,
+                decor: BUILDINGS.DECOR.PENALTY.TIER1,
+                noise: NOISE_POLLUTION.NOISY.TIER5,
+                0.2f
+            );
+            // 建筑特殊属性配置
+            buildingDef.Overheatable = false;
+            buildingDef.RequiresPowerInput = true;
+            buildingDef.PowerInputOffset = new CellOffset(0, 0);
+            buildingDef.EnergyConsumptionWhenActive = 60f * Configration.PowerMulti;
+            buildingDef.ExhaustKilowattsWhenActive = 0.5f;
+            buildingDef.SelfHeatKilowattsWhenActive = 0.5f;
+
+            buildingDef.AudioCategory = "HollowMetal";
+
+            return buildingDef;
+        }
+        public override void ConfigureBuildingTemplate(GameObject go, Tag prefab_tag)
+        {
+            go.AddOrGet<DropAllWorkable>();
+            go.AddOrGet<BuildingComplete>().isManuallyOperated = false;
+            go.AddOrGet<CopyBuildingSettings>();
+            ComplexFabricator complexFabricator = go.AddOrGet<ComplexFabricator>();
+            complexFabricator.heatedTemperature = 353.15f;
+            complexFabricator.duplicantOperated = false;
+            complexFabricator.showProgressBar = false;
+            go.AddOrGet<FabricatorIngredientStatusManager>();
+            BuildingTemplates.CreateComplexFabricatorStorage(go, complexFabricator);
+
+            // 硫 --> 蔗糖
+            AddConfigureRecipe(
+                new List<Tag>() { SimHashes.Sulfur.CreateTag() },
+                new List<float>() { 2f * Configration.PowerMulti },
+                new List<Tag> { SimHashes.Sucrose.CreateTag() },
+                new List<float> { 1f * CONVERSION_EFFICIENCY * Configration.PowerMulti},
+                recipeTime);
+            // 硫 --> 泥巴
+            AddConfigureRecipe(
+                new List<Tag>() { SimHashes.Sulfur.CreateTag() },
+                new List<float>() { 5f * Configration.PowerMulti },
+                new List<Tag> { SimHashes.Mud.CreateTag() },
+                new List<float> { 0.5f * CONVERSION_EFFICIENCY * Configration.PowerMulti },
+                recipeTime);
+            // 蔗糖 --> 泥巴
+            AddConfigureRecipe(
+                new List<Tag>() { SimHashes.Sucrose.CreateTag() },
+                new List<float>() { 3f * Configration.PowerMulti },
+                new List<Tag> { SimHashes.Mud.CreateTag() },
+                new List<float> { 3f * CONVERSION_EFFICIENCY * Configration.PowerMulti },
+                recipeTime);
+
+        }
+
+
+        /// <summary>
+        /// 为机械机械小动物添加配方
+        /// </summary>
+        /// <param name="inTags">输入物标签列表</param>
+        /// <param name="consumedAmounts">输入物消耗量列表</param>
+        /// <param name="outTags">输出物标签列表</param>
+        /// <param name="outputAmounts">输出物产量列表</param>
+        /// <param name="recipeTime">配方时间</param>
+        private void AddConfigureRecipe(List<Tag> inTags, List<float> consumedAmounts, List<Tag> outTags, List<float> outputAmounts, float recipeTime)
+        {
+            // 步骤1：创建临时列表存储批量生成的RecipeElement
+            List<ComplexRecipe.RecipeElement> array = new List<ComplexRecipe.RecipeElement>();
+            List<ComplexRecipe.RecipeElement> array2 = new List<ComplexRecipe.RecipeElement>();
+            // 步骤2：遍历inTags和consumedAmounts，批量添加元素
+            for (int i = 0; i < inTags.Count; i++)
+                array.Add(new ComplexRecipe.RecipeElement(inTags[i], consumedAmounts[i]));
+
+            // 步骤3：遍历outTags和outputAmounts，批量添加元素
+            for (int i = 0; i < outTags.Count; i++)
+                array2.Add(new ComplexRecipe.RecipeElement(outTags[i], outputAmounts[i]));
+
+            ComplexRecipe complexRecipe = new ComplexRecipe(ComplexRecipeManager.MakeRecipeID(ID, array, array2), array.ToArray(), array2.ToArray());
+            complexRecipe.time = recipeTime;
+
+            // 拼接输入物字符串
+            string inString = "";
+            for (int i = 0; i < inTags.Count; i++)
+            {
+
+                inString += Utils.GetItemDisplayName(inTags[i]);
+                if (i < inTags.Count - 1) inString += ", ";
+            }
+            // 拼接输出物字符串
+            string outString = "";
+            for (int i = 0; i < outTags.Count; i++)
+            {
+                outString += Utils.GetItemDisplayName(outTags[i]);
+                if (i < outTags.Count - 1) outString += ", ";
+            }
+            complexRecipe.description = string.Format(STRINGS.BUILDINGS.PREFABS.CRAFTINGTABLE.RECIPE_DESCRIPTION, inString, outString);
+            complexRecipe.nameDisplay = ComplexRecipe.RecipeNameDisplay.IngredientToResult;
+            complexRecipe.fabricators = new List<Tag>
+            {
+                TagManager.Create(ID)
+            };
+        }
+        public override void DoPostConfigureComplete(GameObject go)
+        {
+            Prioritizable.AddRef(go);
+            CykUtils.LogUtil.Log("机械果虫已加载");
+        }
     }
 }

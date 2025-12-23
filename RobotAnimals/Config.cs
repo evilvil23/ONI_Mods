@@ -95,6 +95,14 @@ namespace sinevil.Robot_Animal_Remastered
         [JsonProperty]
         public float robotStego_Conversion_Coefficient { get; set; } = 1f;
 
+        /// <summary>
+        /// 尖块兽配方转换系数
+        /// </summary>
+        [Option(ConfigStrings.WormConversionCoefficient, "", ConfigStrings.category, Format = "F1")]
+        [Limit(0.1, 10)]
+        [JsonProperty]
+        public float robotWorm_Conversion_Coefficient { get; set; } = 1f;
+
 
     }
     internal static class ConfigStrings
@@ -116,6 +124,7 @@ namespace sinevil.Robot_Animal_Remastered
 
         public const string StaterpillarConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotStaterpillar_UI.CONVERSION_COEFFICIENT";
         public const string StegoConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotStego_UI.CONVERSION_COEFFICIENT";
+        public const string WormConversionCoefficient = "RobotAnimalSTRINGS.CONFIGURATIONITEM.RobotWorm_UI.CONVERSION_COEFFICIENT";
 
 
     }
